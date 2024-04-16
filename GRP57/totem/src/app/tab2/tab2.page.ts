@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 
+import { SenhasService } from '../services/senhas.service';
+
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
@@ -7,6 +9,8 @@ import { Component } from '@angular/core';
 })
 export class Tab2Page {
 
-  constructor() {}
+  senhasService = new SenhasService().senhas;
+
+  constructor() { }
 
 }
