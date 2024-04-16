@@ -5,6 +5,9 @@ import { Injectable } from '@angular/core';
 })
 export class SenhasService {
 
+  private horaInicioExpediente: number = 7; // 7:00 da manhã
+  private horaFimExpediente: number = 17;   // 5:00 da tarde
+
   // Declaração das propriedades para as senhas e contadores
   public senhasArray: any = { SG: [], SP: [], SE: [] };
   public senhasGeral: number = 0;
@@ -18,6 +21,10 @@ export class SenhasService {
   // Método para gerar uma nova senha
   novaSenha(tipoSenha: string) {
     let novaSenha: string = '';
+    const horaAtual = new Date().getHours();
+    if (horaAtual < this.horaInicioExpediente || horaAtual >= this.horaFimExpediente) {
+      console.log('Fora do horário de expediente. Não é possível emitir senhas.');
+      return;}
 
     // Lógica para gerar a nova senha
     const data = new Date();
@@ -49,8 +56,14 @@ export class SenhasService {
     return novaSenha;
   }
 
-  // Método para chamar a próxima senha na ordem especificada
   chamarProximaSenha() {
+ // Verifica se está dentro do horário de expediente
+    const horaAtual = new Date().getHours();
+    if (horaAtual < this.horaInicioExpediente || horaAtual >= this.horaFimExpediente) {
+      console.log('Fora do horário de expediente. Não é possível chamar senhas.');
+      return;
+    } 
+    // Método para chamar a próxima senha na ordem especificada
     let senhaChamada: string = '';
 
     if (this.senhasArray.SP.length > 0) {

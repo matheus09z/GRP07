@@ -22,8 +22,8 @@
   <ion-card>
     <ion-card-content>
       <ion-list>
-        <ion-list-header>Senhas Chamadas:</ion-list-header>
-        <ion-item *ngFor="let senha of senhasService.senhasChamadas">
+        <ion-list-header>Últimas 5 Senhas Chamadas:</ion-list-header>
+        <ion-item *ngFor="let senha of ultimasSenhasChamadas">
           {{ senha }}
         </ion-item>
       </ion-list>
