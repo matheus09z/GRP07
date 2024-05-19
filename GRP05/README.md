@@ -1,5 +1,3 @@
 # Alunos
 
 * Nome - matrícula
-
---
