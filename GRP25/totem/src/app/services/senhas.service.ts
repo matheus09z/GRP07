@@ -3,28 +3,47 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
+
 export class SenhasService {
+  [x: string]: any;
 
   public senhasGeral: number = 0;
   public senhasPrior: number = 0;
   public senhasExame: number = 0;
   public senhasTotal: number = 0;
-  public inputNovaSenha: string ='';
-  public senhasAtendidasQtd: number = 0;
+  public inputNovaSenha: string = '';
+  public proximoTipoSenha: string = 'SP';
+  public tempoMedioSP: number = 15; 
+  public tempoMedioSG: number = 5; 
+  public obterUltimasSenhasChamadas: string [] = [];
+  
   public senhasArray: { [key: string]: string[] } = {
-    SG: [],
-    SP: [],
-    SE: []
-  };
-  public senhasAtendidas: {[key: string]: string[]} = {
-    SG: [],
-    SP: [],
-    SE: []
+    SG: [], 
+    SP: [], 
+    SE: [] 
   };
 
+  chamarSenha() {
+    let senhaChamada: string = '';
 
-  constructor() {}
-
+    if (this.proximoTipoSenha === 'SP') {
+      if (this.senhasArray['SP'].length > 0) {
+        senhaChamada = this.senhasArray['SP'].shift()!;
+        this.proximoTipoSenha = (this.senhasArray['SE'].length > 0 || this.senhasArray['SG'].length > 0) ? 'SE' : 'SP';
+      }
+    } else {
+      if (this.senhasArray['SE'].length > 0) {
+        senhaChamada = this.senhasArray['SE'].shift()!;
+        this.proximoTipoSenha = (this.senhasArray['SP'].length > 0) ? 'SP' : 'SG';
+      } else if (this.senhasArray['SG'].length > 0) {
+        senhaChamada = this.senhasArray['SG'].shift()!;
+        this.proximoTipoSenha = (this.senhasArray['SP'].length > 0) ? 'SP' : 'SE';
+      }
+    }
+  
+    return senhaChamada;
+  }
+  
   somaGeral() {
     this.senhasGeral++;
     this.senhasTotal++;
@@ -40,47 +59,45 @@ export class SenhasService {
     this.senhasTotal++;
   }
 
-  tempoDeAtendimento(yx: number, variancia: number): number {
-    const standardDeviation = Math.sqrt(variancia);
-    let sum = 0;
-    for (let i = 0; i < 12; i++) {
-        sum += Math.random();
-    }
-    const numero = (sum - 6) * standardDeviation + yx;
-    return numero;
-  }
-
-  novaSenha(tipoSenha: string = '') {
-    if (tipoSenha == 'SG') {
+  novaSenha(tipoSenha: string = ' ') {
+    if (tipoSenha == 'SG'){
       this.somaGeral();
-      this.inputNovaSenha =
+      this.inputNovaSenha = 
         new Date().getFullYear().toString().substring(2, 4) +
-        (new Date().getMonth() + 1).toString().padStart(2, '0') +
+        new Date().getMonth().toString().padStart(2, '0') +
         new Date().getDate().toString().padStart(2, '0') +
         '-' +
         tipoSenha +
         (this.senhasArray['SG'].length + 1).toString().padStart(2, '0');
       this.senhasArray['SG'].push(this.inputNovaSenha);
-    } else if (tipoSenha == 'SP') {
+    } 
+      
+    else if (tipoSenha == 'SP'){
       this.somaPrior();
-      this.inputNovaSenha =
-        new Date().getFullYear().toString().substring(2, 4) +
-        (new Date().getMonth() + 1).toString().padStart(2, '0') +
-        new Date().getDate().toString().padStart(2, '0') +
+      this.inputNovaSenha = 
+        new Date().getFullYear().toString().substring(2,4) +
+        new Date().getMonth().toString().padStart(2,'0') +
+        new Date().getDate().toString().padStart(2,'0') +
         '-' +
         tipoSenha +
-        (this.senhasArray['SP'].length + 1).toString().padStart(2, '0');
+        (this.senhasArray['SP'].length + 1).toString().padStart(2,'0');
       this.senhasArray['SP'].push(this.inputNovaSenha);
-    } else if (tipoSenha == 'SE') {
-      this.somaExame();
-      this.inputNovaSenha =
-        new Date().getFullYear().toString().substring(2, 4) +
-        (new Date().getMonth() + 1).toString().padStart(2, '0') +
-        new Date().getDate().toString().padStart(2, '0') +
+    }
+
+    else if (tipoSenha == 'SE'){
+      this.somaExame(); 
+      this.inputNovaSenha = 
+        new Date().getFullYear().toString().substring(2,4) +
+        new Date().getMonth().toString().padStart(2,'0') +
+        new Date().getDate().toString().padStart(2,'0') +
         '-' +
         tipoSenha +
-        (this.senhasArray['SE'].length + 1).toString().padStart(2, '0');
-        this.senhasArray['SE'].push(this.inputNovaSenha);
+        (this.senhasArray['SE'].length + 1).toString().padStart(2,'0');
+      this.senhasArray['SE'].push(this.inputNovaSenha);
     }
+
+    console.log(this.senhasArray);
   }
+
+  constructor() { }
 }
