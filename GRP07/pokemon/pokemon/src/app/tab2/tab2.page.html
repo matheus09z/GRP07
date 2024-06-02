@@ -1,0 +1,44 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Batalha de Pokémons</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Batalha</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card *ngIf="pokemon">
+    <ion-card-header>
+      <ion-card-title color={{resultadoCor}}>{{ pokemon.name | uppercase }} - {{ resultadoBatalha }}</ion-card-title>
+      <ion-img [src]="pokemon.sprites.front_default"></ion-img>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Habilidades: {{ this.pokemon.abilities.length }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Altura: {{ pokemon.height }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label>Peso: {{ pokemon.weight }}</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-fab vertical="bottom" horizontal="center" slot="fixed">
+    <ion-fab-button (click)="adicionarFotoNaGaleria()">
+      <ion-icon name="camera"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+  <ion-button expand="block" fill="solid" (click)="buscarPokemonAleatorio()">
+    Batalhar
+    <ion-icon name="sword" slot="end"></ion-icon>
+  </ion-button>
+</ion-content>
